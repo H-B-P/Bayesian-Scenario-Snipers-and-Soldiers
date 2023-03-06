@@ -7,14 +7,14 @@
 </head>
 <body>
 <div id="everything">
-  <div>You are a soldier, planning to attack an enemy position. You have a foolproof strategy for taking positions held by ordinary enemies, which will get you killed if you use it on positions held by snipers. You can call in an airstrike that will reliably devastate the enemy position, but you'd prefer not to if you don't have to. Using an airstrike will overextend the army's air support; there's a <span id="Apct"></span>% chance this will lead to a fellow soldier's death.</div>
+  <div>You are a soldier, planning to attack an enemy position. You have a foolproof strategy for taking positions held by ordinary enemies, which will get you killed if you use it on positions held by snipers. You can call in an airstrike that will reliably devastate the enemy position, but you'd prefer not to if you don't have to. Using an airstrike will overextend the army's air support; there's a <b><span id="Apct"></span>%</b> chance this will lead to a fellow soldier's death.</div>
   <br>
   <br>
-  <div><span id="Xpct"></span>% of enemies are snipers.</div>
+  <div><b><span id="Xpct"></span>%</b> of enemies are snipers.</div>
   <br>
-  <div>Snipers hit their target <span id="Ypct"></span>% of the time.</div>
+  <div>Snipers hit their target <b><span id="Ypct"></span>%</b> of the time.</div>
   <br>
-  <div>Ordinary enemies hit their target <span id="Zpct"></span>% of the time.</div>
+  <div>Ordinary enemies hit their target <b><span id="Zpct"></span>%</b> of the time.</div>
   <br>
   <div id="hitLines"></div>
   <br>
@@ -60,6 +60,8 @@ function full_reset(){
 
 function reset(){
  
+ ended=false
+ 
  PSniper = X/100
  //showPSniper = false
  
@@ -82,6 +84,7 @@ function reset(){
 }
 
 function poke(){
+ if(!ended){
  if (Math.random()>(0.03*shotsTaken)){
   if (sniper){
    if ((Math.random()*100)<Y){
@@ -108,6 +111,7 @@ function poke(){
  }
  else{
   document.getElementById("pokeLine").innerHTML = "No shot is taken. The enemy seems to have figured out what you're doing. Time to pick a strategy."
+ }
  }
 }
 
@@ -136,6 +140,7 @@ function hide_psniper(){
 }
 
 function strike(){
+ ended=true
  if ((Math.random()*100)<A){
   document.getElementById("choiceLine").innerHTML = "You call in an airstrike, and the enemy's position is obliterated. Some time later, you find out a comrade of yours was killed due to a shortage of air support."
  }
@@ -145,11 +150,17 @@ function strike(){
 }
 
 function attack(){
+ ended=true
  if (sniper){
   document.getElementById("choiceLine").innerHTML = "A minute into the execution of your foolproof strategy, the sniper in the enemy position shoots you dead."
+  PSniper=1 
  }
  else{
   document.getElementById("choiceLine").innerHTML = "You successfully take the enemy position without relying on air support."
+  PSniper=0
+ }
+ if(showPSniper){
+  document.getElementById("probLine").innerHTML = "P(Sniper): "+ Math.floor(PSniper*100000)/1000 + "%"
  }
 }
 
